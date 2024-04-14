@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View, StyleSheet } from "react-native";
 import { useSignIn } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 
@@ -28,9 +28,11 @@ const Login = () => {
         }
     };
     return (
-        <View>
-            <View>
-                <TextInput
+        <View style={styles.containerBox}>
+            <Text style={styles.snapMenuText}>Snap Menu</Text>
+            <View style={styles.containerBox}>
+                <Text style={styles.helpText}>Login to your account</Text>
+                <TextInput style={styles.input}
                     autoCapitalize="none"
                     value={emailAddress}
                     placeholder="Email..."
@@ -41,7 +43,7 @@ const Login = () => {
             </View>
 
             <View>
-                <TextInput
+                <TextInput style={styles.input}
                     value={password}
                     placeholder="Password..."
                     secureTextEntry={true}
@@ -49,14 +51,58 @@ const Login = () => {
                 />
             </View>
 
-            <TouchableOpacity onPress={onSignInPress}>
-                <Text>Sign in</Text>
+            <TouchableOpacity onPress={onSignInPress} style={styles.button}>
+                <Text style={styles.buttonText}>Sign in</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.replace("/register")}>
-                <Text>Create account</Text>
+            <Text style={styles.helpText}>Don't have an account yet?</Text>
+            <TouchableOpacity style={styles.button} onPress={() => router.replace("/register")}>
+                <Text style={styles.buttonText} >Create account</Text>
             </TouchableOpacity>
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    containerBox: {
+        marginTop: 150,
+    },
+    snapMenuText: {
+        fontSize: 50,
+        // fontFamily: 'Verdana',
+        fontWeight: '800', 
+        textAlign: 'center',
+    },
+    input: {
+        height: 40,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 10,
+        paddingHorizontal: 10,
+        fontSize: 16,
+        color: '#333',
+        margin: 10,
+    },
+    button: {
+        backgroundColor: '#007bff',
+        borderRadius: 10,
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        alignItems: 'center',
+        margin: 10,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    helpText: {
+        color: '#333',
+        textAlign: 'center',
+    },
+    returnButton: {
+        padding: 10,
+        textAlign: 'center',
+    }
+});
 
 export default Login;

@@ -1,6 +1,7 @@
 import * as React from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View, StyleSheet } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
+import { Link, useRouter } from "expo-router";
 
 const Register = () => {
     const { isLoaded, signUp, setActive } = useSignUp();
@@ -11,6 +12,8 @@ const Register = () => {
     const [password, setPassword] = React.useState("");
     const [pendingVerification, setPendingVerification] = React.useState(false);
     const [code, setCode] = React.useState("");
+
+    const router = useRouter();
 
     // start the sign up process.
     const onSignUpPress = async () => {
@@ -58,11 +61,12 @@ const Register = () => {
     };
 
     return (
-        <View>
+        <View style={styles.containerBox}>
             {!pendingVerification && (
                 <View>
+                    <Text style={styles.helpText}>Create your account</Text>
                     <View>
-                        <TextInput
+                        <TextInput style={styles.input}
                             autoCapitalize="none"
                             value={firstName}
                             placeholder="First Name..."
@@ -72,7 +76,7 @@ const Register = () => {
                         />
                     </View>
                     <View>
-                        <TextInput
+                        <TextInput style={styles.input}
                             autoCapitalize="none"
                             value={lastName}
                             placeholder="Last Name..."
@@ -80,7 +84,7 @@ const Register = () => {
                         />
                     </View>
                     <View>
-                        <TextInput
+                        <TextInput style={styles.input}
                             autoCapitalize="none"
                             value={emailAddress}
                             placeholder="Email..."
@@ -89,7 +93,7 @@ const Register = () => {
                     </View>
 
                     <View>
-                        <TextInput
+                        <TextInput style={styles.input}
                             value={password}
                             placeholder="Password..."
                             placeholderTextColor="#000"
@@ -98,8 +102,8 @@ const Register = () => {
                         />
                     </View>
 
-                    <TouchableOpacity onPress={onSignUpPress}>
-                        <Text>Sign up</Text>
+                    <TouchableOpacity style={styles.button} onPress={onSignUpPress}>
+                        <Text style={styles.buttonText}>Sign up</Text>
                     </TouchableOpacity>
                 </View>
             )}
@@ -117,8 +121,56 @@ const Register = () => {
                     </TouchableOpacity>
                 </View>
             )}
+            {/* go back to login button */}
+            <Text style={styles.helpText}>Already have an account?</Text>
+            <TouchableOpacity style={styles.button} onPress={() => router.replace("/login")}>
+                <Text style={styles.buttonText} >Return to Login screen.</Text>
+            </TouchableOpacity>
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    containerBox: {
+        marginTop: 150,
+    },
+    snapMenuText: {
+        fontSize: 50,
+        // fontFamily: 'Verdana',
+        fontWeight: '800',
+        textAlign: 'center',
+    },
+    input: {
+        height: 40,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 10,
+        paddingHorizontal: 10,
+        fontSize: 16,
+        color: '#333',
+        margin: 10,
+    },
+    button: {
+        backgroundColor: '#007bff',
+        borderRadius: 10,
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        alignItems: 'center',
+        margin: 10,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    helpText: {
+        color: '#333',
+        textAlign: 'center',
+    },
+    returnButton: {
+        padding: 10,
+        textAlign: 'center',
+    }
+});
 
 export default Register;
