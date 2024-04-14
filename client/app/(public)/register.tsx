@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
+import { useRouter } from "expo-router";
 
 const Register = () => {
     const { isLoaded, signUp, setActive } = useSignUp();
@@ -11,6 +12,8 @@ const Register = () => {
     const [password, setPassword] = React.useState("");
     const [pendingVerification, setPendingVerification] = React.useState(false);
     const [code, setCode] = React.useState("");
+
+    const router = useRouter();
 
     // start the sign up process.
     const onSignUpPress = async () => {
@@ -52,6 +55,7 @@ const Register = () => {
             );
 
             await setActive({ session: completeSignUp.createdSessionId });
+            router.replace("/home");
         } catch (err: any) {
             console.error(JSON.stringify(err, null, 2));
         }
