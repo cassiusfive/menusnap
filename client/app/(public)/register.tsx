@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
-D;
+
 import { Link, useRouter } from "expo-router";
 
 const Register = () => {
