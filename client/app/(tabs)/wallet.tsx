@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";
-import { useAuth } from "@clerk/clerk-expo";
 import { auth, db } from "../services/firebase";
 import {
     getFirestore,
@@ -21,7 +20,6 @@ type Transaction = {
 const Wallet = () => {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-    const { getToken } = useAuth();
     const getTransactions = async () => {
         const uid = auth.currentUser!.uid;
         const transactionsQuery = query(
