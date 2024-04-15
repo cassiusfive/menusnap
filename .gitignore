@@ -47,3 +47,4 @@ venv.bak/
 expo-env.d.ts
 # @end expo-cli
 
+.zed/
