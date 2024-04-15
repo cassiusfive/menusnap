@@ -35,14 +35,14 @@ const Register = () => {
         emailAddress,
         password,
       });
-
-      // send the email.
-      await signUp.prepareEmailAddressVerification({
-        strategy: "email_code",
-      });
+      router.replace("/home");
+      // // send the email.
+      // await signUp.prepareEmailAddressVerification({
+      //   strategy: "email_code",
+      // });
 
       // change the UI to our pending section.
-      setPendingVerification(true);
+      // setPendingVerification(true);
     } catch (err: any) {
       console.error(JSON.stringify(err, null, 2));
     }
