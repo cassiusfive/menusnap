@@ -2,8 +2,12 @@ import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import { Slot, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
+import { app } from "./services/firebase";
+import { getAuth, signInWithCustomToken } from "firebase/auth";
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+const auth = getAuth(app);
 
 const tokenCache = {
     async getToken(key: string) {
@@ -23,16 +27,24 @@ const tokenCache = {
 };
 
 const InitialLayout = () => {
-    const { isLoaded, isSignedIn } = useAuth();
+    const { isLoaded, isSignedIn, getToken } = useAuth();
     const segments = useSegments();
     const router = useRouter();
+
+    const loginFirebase = async () => {
+        const token = await getToken({ template: "integration_firebase" });
+        await signInWithCustomToken(auth, token || "");
+    };
 
     useEffect(() => {
         if (!isLoaded) return;
 
-        const inTabsGroup = segments[0] === "(auth)";
+        const inTabsGroup = segments[0] === "(tabs)";
 
         console.log("User changed: ", isSignedIn);
+        if (isSignedIn) {
+            loginFirebase();
+        }
 
         if (isSignedIn && !inTabsGroup) {
             router.replace("/home");

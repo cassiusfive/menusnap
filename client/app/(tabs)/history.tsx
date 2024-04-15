@@ -2,26 +2,52 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/clerk-expo";
-import { getAuth, signInWithCustomToken } from "firebase/auth";
-import { app } from "../services/firebase";
+import { auth, db } from "../services/firebase";
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    query,
+    where,
+} from "firebase/firestore";
 
-const auth = getAuth(app);
+type Transaction = {
+    business_id: string;
+    user_id: string;
+    amount: number;
+    time: string;
+};
 
 const History = () => {
-    const [transactions, setTransactions] = useState([]);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
 
     const { getToken } = useAuth();
     const getTransactions = async () => {
-        const token = await getToken({ template: "integration_firebase" });
-        const userCredentials = await signInWithCustomToken(auth, token || "");
-        console.log("User:", userCredentials.user);
+        const uid = auth.currentUser!.uid;
+        const transactionsQuery = query(
+            collection(db, "transactions"),
+            where("user_id", "==", uid),
+        );
+        const querySnapshot = await getDocs(transactionsQuery);
+        const transactionsData = querySnapshot.docs.map(
+            (doc) => doc.data() as Transaction,
+        );
+        setTransactions(transactionsData);
     };
 
     useEffect(() => {
-        getTransactions();
+        getTransactions().catch((err) => {
+            console.log(err);
+        });
     }, []);
 
-    return <View></View>;
+    return (
+        <View>
+            {transactions.map((transaction, index) => {
+                return <Text key={index}>{transaction.amount}</Text>;
+            })}
+        </View>
+    );
 };
 
 export default History;
