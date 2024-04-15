@@ -18,7 +18,7 @@ type Transaction = {
     time: string;
 };
 
-const History = () => {
+const Wallet = () => {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
     const { getToken } = useAuth();
@@ -50,4 +50,4 @@ const History = () => {
     );
 };
 
-export default History;
+export default Wallet;
