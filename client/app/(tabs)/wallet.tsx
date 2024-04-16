@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";
 import { auth, db } from "../services/firebase";
@@ -17,6 +17,12 @@ type Transaction = {
     user_id: string;
     amount: number;
     time: string;
+};
+
+type TransactionCardProps = { transaction: Transaction };
+
+const TransactionCard = (props: TransactionCardProps) => {
+    return <Card></Card>;
 };
 
 const Wallet = () => {
@@ -71,9 +77,10 @@ const Wallet = () => {
             <Text style={styles.header}>Latest Transactions</Text>
             {transactions.map((transaction, index) => {
                 return (
-                    <Card key={index}>
-                        <Text>Amount: {transaction.amount}</Text>
-                    </Card>
+                    <TransactionCard
+                        key={index}
+                        transaction={transaction}
+                    ></TransactionCard>
                 );
             })}
         </View>
@@ -84,6 +91,7 @@ const styles = StyleSheet.create({
     header: {
         fontWeight: "bold",
         fontSize: 30,
+        textAlign: "center",
     },
 });
 
