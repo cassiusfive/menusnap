@@ -3,12 +3,14 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { auth, db } from "../services/firebase";
 import {
-    getFirestore,
     collection,
     getDocs,
     query,
     where,
+    doc,
+    getDoc,
 } from "firebase/firestore";
+import Card from "@/shared/Card";
 
 type Transaction = {
     business_id: string;
@@ -19,33 +21,70 @@ type Transaction = {
 
 const Wallet = () => {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [balance, setBalance] = useState<Number>(0);
 
-    const getTransactions = async () => {
+    const getWalletInfo = async () => {
         const uid = auth.currentUser!.uid;
+
         const transactionsQuery = query(
             collection(db, "transactions"),
             where("user_id", "==", uid),
         );
-        const querySnapshot = await getDocs(transactionsQuery);
-        const transactionsData = querySnapshot.docs.map(
+        const transactionsSnapshot = await getDocs(transactionsQuery);
+        const transactionsData = transactionsSnapshot.docs.map(
             (doc) => doc.data() as Transaction,
         );
         setTransactions(transactionsData);
+
+        const balanceRef = doc(db, "users", uid);
+        const balanceSnapshot = await getDoc(balanceRef);
+        setBalance(balanceSnapshot.data()!.balance);
     };
 
     useEffect(() => {
-        getTransactions().catch((err) => {
+        getWalletInfo().catch((err) => {
             console.log(err);
         });
     }, []);
 
     return (
-        <View>
+        <View style={{ padding: 20 }}>
+            <Card
+                style={{
+                    backgroundColor: "#27ae60",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: 20,
+                }}
+            >
+                <Text
+                    style={{
+                        color: "white",
+                        fontWeight: "bold",
+                        fontSize: 40,
+                    }}
+                >
+                    ${balance.toFixed(2)}
+                </Text>
+            </Card>
+            <Text style={styles.header}>Latest Transactions</Text>
             {transactions.map((transaction, index) => {
-                return <Text key={index}>{transaction.amount}</Text>;
+                return (
+                    <Card key={index}>
+                        <Text>Amount: {transaction.amount}</Text>
+                    </Card>
+                );
             })}
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    header: {
+        fontWeight: "bold",
+        fontSize: 30,
+    },
+});
 
 export default Wallet;
