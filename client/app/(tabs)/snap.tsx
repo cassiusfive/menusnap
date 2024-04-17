@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, View, Button, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as FileSystem from "expo-file-system";
+import axios from "axios";
 
 const Snap = () => {
     const [hasPermission, setHasPermission] = useState<boolean>(false);
@@ -21,6 +22,32 @@ const Snap = () => {
             let photo = await cameraRef.current.takePictureAsync();
             setCapturedImage(photo.uri);
             sendImage(photo.uri);
+
+            const apiKey = process.env.EXPO_PUBLIC_GOOGLE_API_KEY!;
+            const apiURL = `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`;
+
+            const base64ImageData = await FileSystem.readAsStringAsync(
+                photo.uri,
+                {
+                    encoding: FileSystem.EncodingType.Base64,
+                },
+            );
+
+            const requestData = {
+                requests: [
+                    {
+                        image: {
+                            content: base64ImageData,
+                        },
+                        features: [{ type: "DOCUMENT_TEXT_DETECTION" }],
+                    },
+                ],
+            };
+
+            const apiResponse = await axios.post(apiURL, requestData);
+            console.log(
+                apiResponse.data.responses[0].textAnnotations[0].description,
+            );
         } else {
             console.log("Camera ref is not set.");
         }
@@ -44,12 +71,12 @@ const Snap = () => {
                 ref={(ref) => (cameraRef.current = ref)}
             />
             <Button title="Take Picture" onPress={handleTakePicture} />
-            {capturedImage && (
+            {/* {capturedImage && (
                 <Image
                     source={{ uri: capturedImage }}
                     style={styles.imagePreview}
                 />
-            )}
+            )} */}
         </View>
     );
 };
