@@ -19,12 +19,6 @@ type Transaction = {
     time: string;
 };
 
-type TransactionCardProps = { transaction: Transaction };
-
-const TransactionCard = (props: TransactionCardProps) => {
-    return <Card></Card>;
-};
-
 const Wallet = () => {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [balance, setBalance] = useState<Number>(0);
@@ -74,15 +68,44 @@ const Wallet = () => {
                     ${balance.toFixed(2)}
                 </Text>
             </Card>
+            {/* the test acc im on didnt have any data history so i made some dummy vals, styled it, and switched it with the actual transaction.data */}
             <Text style={styles.header}>Latest Transactions</Text>
             {transactions.map((transaction, index) => {
                 return (
-                    <TransactionCard
-                        key={index}
-                        transaction={transaction}
-                    ></TransactionCard>
+                    <Card key={index} style={styles.horizontalBox}>
+                        {/* this is the green color box rounded */}
+                        <Card style={styles.littleBox}>
+                            <Card style={styles.greenBox}></Card>
+                            {/* vertical */}
+                            <Card style={styles.verticalBox}>
+                                {/* bold this */}
+                                <Text style={styles.boldText}>{transaction.business_id}</Text>
+                                <Text>Corvallis, OR</Text>
+                                <Text>{transaction.time}</Text>
+                            </Card>
+                        </Card>
+                        <Text style={styles.moneyText}>${transaction.amount}</Text>
+                    </Card>
                 );
             })}
+            
+            {/* test dummy vals */}
+            {/* horizontal */}
+            {/* <Card style={styles.horizontalBox}> */}
+                {/* this is the green color box rounded */}
+                {/* <Card style={styles.littleBox}> */}
+                    {/* <Card style={styles.greenBox}></Card> */}
+                    {/* vertical */}
+                    {/* <Card style={styles.verticalBox}> */}
+                        {/* bold this */}
+                        {/* <Text style={styles.boldText}>Local Boyz</Text> */}
+                        {/* <Text>Corvallis, OR</Text> */}
+                        {/* <Text>4/17/24</Text> */}
+                    {/* </Card> */}
+                {/* </Card> */}
+                {/* <Text style={styles.moneyText}>$20</Text> */}
+            {/* </Card> */}
+            
         </View>
     );
 };
@@ -92,6 +115,43 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 30,
         textAlign: "center",
+    },
+    horizontalBox: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        paddingTop: 0,
+        paddingBottom: 0,
+    },
+    littleBox: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        shadowOpacity: 0,
+        margin: 0,
+        padding: 0,
+    },
+    verticalBox: {
+        shadowOpacity: 0,
+        margin: 0,
+        padding: 0,
+        paddingLeft: 15,
+    },
+    greenBox: {
+        backgroundColor: "#27ae60",
+        width: 40,
+        height: 40,
+        shadowOpacity: 0,
+        padding: 0,
+        margin: 0,
+        alignSelf: "center",
+    },
+    // maybe put like a checkmark wthhin the grreenbox
+    //have a selection of different colors and have a random number generator tha select one of them
+    boldText: {
+        fontWeight: "bold",
+    },
+    moneyText: {
+        paddingTop: 10,
     },
 });
 
