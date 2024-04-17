@@ -13,10 +13,11 @@ import {
 import Card from "@/shared/Card";
 
 type Transaction = {
+    business_name: string;
     business_id: string;
     user_id: string;
     amount: number;
-    time: string;
+    time: any;
 };
 
 const Wallet = () => {
@@ -35,6 +36,7 @@ const Wallet = () => {
             (doc) => doc.data() as Transaction,
         );
         setTransactions(transactionsData);
+        console.log(transactions);
 
         const balanceRef = doc(db, "users", uid);
         const balanceSnapshot = await getDoc(balanceRef);
@@ -79,33 +81,38 @@ const Wallet = () => {
                             {/* vertical */}
                             <Card style={styles.verticalBox}>
                                 {/* bold this */}
-                                <Text style={styles.boldText}>{transaction.business_id}</Text>
+                                <Text style={styles.boldText}>
+                                    {transaction.business_name}
+                                </Text>
                                 <Text>Corvallis, OR</Text>
-                                <Text>{transaction.time}</Text>
+                                <Text>
+                                    {transaction.time.toDate().toString()}
+                                </Text>
                             </Card>
                         </Card>
-                        <Text style={styles.moneyText}>${transaction.amount}</Text>
+                        <Text style={styles.moneyText}>
+                            ${transaction.amount}
+                        </Text>
                     </Card>
                 );
             })}
-            
+
             {/* test dummy vals */}
             {/* horizontal */}
             {/* <Card style={styles.horizontalBox}> */}
-                {/* this is the green color box rounded */}
-                {/* <Card style={styles.littleBox}> */}
-                    {/* <Card style={styles.greenBox}></Card> */}
-                    {/* vertical */}
-                    {/* <Card style={styles.verticalBox}> */}
-                        {/* bold this */}
-                        {/* <Text style={styles.boldText}>Local Boyz</Text> */}
-                        {/* <Text>Corvallis, OR</Text> */}
-                        {/* <Text>4/17/24</Text> */}
-                    {/* </Card> */}
-                {/* </Card> */}
-                {/* <Text style={styles.moneyText}>$20</Text> */}
+            {/* this is the green color box rounded */}
+            {/* <Card style={styles.littleBox}> */}
+            {/* <Card style={styles.greenBox}></Card> */}
+            {/* vertical */}
+            {/* <Card style={styles.verticalBox}> */}
+            {/* bold this */}
+            {/* <Text style={styles.boldText}>Local Boyz</Text> */}
+            {/* <Text>Corvallis, OR</Text> */}
+            {/* <Text>4/17/24</Text> */}
             {/* </Card> */}
-            
+            {/* </Card> */}
+            {/* <Text style={styles.moneyText}>$20</Text> */}
+            {/* </Card> */}
         </View>
     );
 };
@@ -117,15 +124,15 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     horizontalBox: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
         paddingTop: 0,
         paddingBottom: 0,
     },
     littleBox: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
+        flexDirection: "row",
+        flexWrap: "wrap",
         shadowOpacity: 0,
         margin: 0,
         padding: 0,
