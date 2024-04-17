@@ -107,7 +107,7 @@ const Business = () => {
             }).start();
         } else {
             Animated.timing(heightAnim, {
-                toValue: 80,
+                toValue: 100,
                 duration: 400,
                 useNativeDriver: false,
             }).start();
@@ -192,6 +192,8 @@ const Business = () => {
                             fontWeight: "bold",
                             fontSize: 20,
                             color: "white",
+                            paddingTop: 20,
+                            paddingBottom: 50,
                         }}
                     >
                         Order Summary
@@ -203,6 +205,8 @@ const Business = () => {
                         fontWeight: "bold",
                         fontSize: 20,
                         color: "white",
+                        paddingTop: 50,
+                        paddingBottom: 50,
                     }}
                 >
                     Subtotal: ${subtotal.toFixed(2)}
