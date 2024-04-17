@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as FileSystem from 'expo-file-system';
 
+<<<<<<< HEAD:client/app/(tabs)/home.tsx
 const Home = () => {
     const [hasPermission, setHasPermission] = useState<boolean>(false);
     const [capturedImage, setCapturedImage] = useState<string | null>(null);
@@ -45,10 +46,17 @@ const Home = () => {
             />
             <Button title="Take Picture" onPress={handleTakePicture} />
             {capturedImage && <Image source={{ uri: capturedImage }} style={styles.imagePreview} />}
+=======
+const Explore = () => {
+    return (
+        <View>
+            <Text>Explore</Text>
+>>>>>>> cassius:client/app/(tabs)/explore.tsx
         </View>
     );
 };
 
+<<<<<<< HEAD:client/app/(tabs)/home.tsx
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -70,3 +78,6 @@ const styles = StyleSheet.create({
 });
 
 export default Home;
+=======
+export default Explore;
+>>>>>>> cassius:client/app/(tabs)/explore.tsx
