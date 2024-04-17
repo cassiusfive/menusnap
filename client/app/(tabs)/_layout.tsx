@@ -5,7 +5,10 @@ import { Tabs } from "expo-router";
 
 const TabLayout = () => {
     return (
-        <Tabs screenOptions={{ tabBarActiveTintColor: "blue" }}>
+        <Tabs screenOptions={{
+            tabBarActiveTintColor: "blue",
+            tabBarStyle: { height: 100 },
+        }} >
             <Tabs.Screen
                 name="explore"
                 options={{
