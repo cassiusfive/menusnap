@@ -6,9 +6,10 @@ import {
     View,
     ActivityIndicator,
     Dimensions,
+    Animated,
 } from "react-native";
 import { useLocalSearchParams, Stack } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     doc,
     getDoc,
@@ -94,6 +95,25 @@ const Business = () => {
         });
     }, []);
 
+    const heightAnim = useRef(new Animated.Value(100)).current;
+    const [checkoutOpen, setCheckoutOpen] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (checkoutOpen) {
+            Animated.timing(heightAnim, {
+                toValue: 500,
+                duration: 400,
+                useNativeDriver: false,
+            }).start();
+        } else {
+            Animated.timing(heightAnim, {
+                toValue: 80,
+                duration: 400,
+                useNativeDriver: false,
+            }).start();
+        }
+    }, [checkoutOpen]);
+
     if (items.length === 0) {
         return (
             <>
@@ -122,9 +142,19 @@ const Business = () => {
         setQuantities(newQuantities);
     };
 
+    const toggleOpen = () => {
+        setCheckoutOpen(!checkoutOpen);
+    };
+
+    const subtotal = items.reduce(
+        (sum, item, index) => sum + item.price * quantities[index],
+        0,
+    );
+
     return (
         <>
             <Stack.Screen options={{ title: businessName as string }} />
+
             <ScrollView style={{ padding: 10 }}>
                 {items.length
                     ? items.map((item, index) => {
@@ -144,7 +174,58 @@ const Business = () => {
                       })
                     : null}
             </ScrollView>
-            <View style={styles.peepingContainer}></View>
+            <Animated.View
+                style={[styles.peepingContainer, { height: heightAnim }]}
+            >
+                <Pressable
+                    onPress={toggleOpen}
+                    style={{
+                        borderRadius: 10,
+                        height: 38,
+                        justifyContent: "center",
+                        marginBottom: 20,
+                    }}
+                >
+                    <Text
+                        style={{
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            fontSize: 20,
+                            color: "white",
+                        }}
+                    >
+                        Order Summary
+                    </Text>
+                </Pressable>
+                <Text
+                    style={{
+                        textAlign: "center",
+                        fontWeight: "bold",
+                        fontSize: 20,
+                        color: "white",
+                    }}
+                >
+                    Subtotal: ${subtotal.toFixed(2)}
+                </Text>
+                <Pressable
+                    style={{
+                        backgroundColor: "black",
+                        padding: 16,
+                        borderRadius: 10,
+                    }}
+                >
+                    <Text
+                        style={{
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            fontSize: 20,
+                            color: "white",
+                        }}
+                    >
+                        Complete Purchase!
+                    </Text>
+                </Pressable>
+            </Animated.View>
         </>
     );
 };
@@ -184,6 +265,7 @@ const styles = StyleSheet.create({
         height: 100,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
+        padding: 20,
     },
 });
 
