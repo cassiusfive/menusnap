@@ -35,8 +35,10 @@ const Wallet = () => {
         const transactionsData = transactionsSnapshot.docs.map(
             (doc) => doc.data() as Transaction,
         );
+        transactionsData.sort((a, b) => {
+            return a.time.seconds - b.time.seconds;
+        });
         setTransactions(transactionsData);
-        console.log(transactions);
 
         const balanceRef = doc(db, "users", uid);
         const balanceSnapshot = await getDoc(balanceRef);
@@ -73,6 +75,7 @@ const Wallet = () => {
             {/* the test acc im on didnt have any data history so i made some dummy vals, styled it, and switched it with the actual transaction.data */}
             <Text style={styles.header}>Latest Transactions</Text>
             {transactions.map((transaction, index) => {
+                const date = transaction.time.toDate();
                 return (
                     <Card key={index} style={styles.horizontalBox}>
                         {/* this is the green color box rounded */}
@@ -86,7 +89,8 @@ const Wallet = () => {
                                 </Text>
                                 <Text>Corvallis, OR</Text>
                                 <Text>
-                                    {transaction.time.toDate().toString()}
+                                    {date.getMonth()}/{date.getDay()}/
+                                    {date.getYear() - 100}
                                 </Text>
                             </Card>
                         </Card>
