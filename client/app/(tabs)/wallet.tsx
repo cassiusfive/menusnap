@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useState, useEffect } from "react";
 import { auth, db } from "../services/firebase";
@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     header: {
         fontWeight: "bold",
         fontSize: 30,
+        textAlign: "center",
     },
     horizontalBox: {
         flexDirection: 'row',

@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { StyleSheet, Text, View, Button, Image } from "react-native";
 
 const Explore = () => {
     return (
