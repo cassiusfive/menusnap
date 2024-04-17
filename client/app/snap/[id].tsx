@@ -1,5 +1,5 @@
-import { Text, View, SafeAreaView } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { Text, View } from "react-native";
+import { useLocalSearchParams, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import {
     doc,
@@ -46,9 +46,9 @@ const Business = () => {
     }, []);
 
     return (
-        <SafeAreaView>
-            <Text>{businessName}</Text>
-        </SafeAreaView>
+        <View>
+            <Stack.Screen options={{ title: businessName as string }} />
+        </View>
     );
 };
 

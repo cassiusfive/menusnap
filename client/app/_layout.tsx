@@ -1,5 +1,5 @@
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
-import { Slot, useRouter, useSegments } from "expo-router";
+import { Stack, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
 import { app } from "./services/firebase";
@@ -47,13 +47,20 @@ const InitialLayout = () => {
         }
 
         if (isSignedIn && !inTabsGroup) {
-            router.replace("/home");
+            router.replace("/explore");
         } else if (!isSignedIn) {
             router.replace("/login");
         }
     }, [isSignedIn]);
 
-    return <Slot />;
+    return (
+        <Stack>
+            <Stack.Screen
+                name="(tabs)"
+                options={{ headerShown: false, title: "Snap!" }}
+            />
+        </Stack>
+    );
 };
 
 const RootLayout = () => {

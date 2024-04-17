@@ -16,7 +16,7 @@ const TabLayout = () => {
                 }}
             />
             <Tabs.Screen
-                name="home"
+                name="snap"
                 options={{
                     title: "Snap!",
                     tabBarIcon: ({ color }) => (
