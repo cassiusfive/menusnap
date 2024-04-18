@@ -70,13 +70,13 @@ const MenuItem = (props: MenuItemProps) => {
                     paddingBottom: 0,
                 }}>
                     <Pressable onPress={handlePress}>
-                        <Card style={{ gap: 5, shadowOpacity: 0, margin: 0, padding: 10, backgroundColor: 'black', width: 50, textAlign: "center", }}>
-                            <Text style={{ textAlign: 'center', color: 'white', fontSize: 30 }}>-</Text>
+                        <Card style={{ gap: 5, shadowOpacity: 0, margin: 0, padding: 0, backgroundColor: 'black', width: 30,height: 31, textAlign: "center", }}>
+                            <Text style={{ textAlign: 'center', color: 'white', fontSize: 25, margin:0, padding:0 }}>-</Text>
                         </Card>
                     </Pressable>
                     <Pressable onPress={handlePress}>
-                        <Card style={{ gap: 5, shadowOpacity: 0, margin: 0, padding: 10, backgroundColor: 'black', width: 50 }}>
-                            <Text style={{ textAlign: 'center', color: 'white', fontSize: 30 }}>+</Text>
+                        <Card style={{ gap: 5, shadowOpacity: 0, margin: 0, padding: 0, backgroundColor: 'black', width: 30, height: 31, textAlign: "center", }}>
+                            <Text style={{ textAlign: 'center', color: 'white', fontSize: 25, margin: 0, padding: 0 }}>+</Text>
                         </Card>
                     </Pressable>
                 </View>
