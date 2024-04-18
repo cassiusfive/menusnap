@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, Text, View, Button, Image } from "react-native";
+import {
+    StyleSheet,
+    Text,
+    View,
+    Button,
+    Image,
+    ActivityIndicator,
+} from "react-native";
 import { Camera } from "expo-camera";
 import * as FileSystem from "expo-file-system";
 import axios from "axios";
@@ -18,6 +25,7 @@ const Snap = () => {
 
     const cameraRef = useRef<Camera | null>(null);
     const router = useRouter();
+    const [searching, setSearching] = useState<boolean>(false);
 
     useEffect(() => {
         (async () => {
@@ -29,6 +37,8 @@ const Snap = () => {
     const handleTakePicture = async () => {
         if (cameraRef.current) {
             let photo = await cameraRef.current.takePictureAsync();
+
+            setSearching(true);
 
             const apiKey = process.env.EXPO_PUBLIC_GOOGLE_API_KEY!;
             const apiURL = `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`;
@@ -67,6 +77,7 @@ const Snap = () => {
                     router.push(`/snap/${business.id}`);
                 }
             }
+            setSearching(false);
         } else {
             console.log("Camera ref is not set.");
         }
@@ -74,6 +85,23 @@ const Snap = () => {
 
     if (hasPermission === false) {
         return <Text>No access to camera</Text>;
+    }
+
+    if (searching) {
+        return (
+            <>
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <ActivityIndicator />
+                    <Text style={{ margin: 24 }}>Analyzing menu</Text>
+                </View>
+            </>
+        );
     }
 
     return (

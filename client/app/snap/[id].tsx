@@ -17,9 +17,14 @@ import {
     collection,
     where,
     getDocs,
+    Timestamp,
+    addDoc,
+    updateDoc,
 } from "firebase/firestore";
-import { db } from "../services/firebase";
+import { db, auth } from "../services/firebase";
+import "firebase/firestore";
 import Card from "@/shared/Card";
+import { router } from "expo-router";
 
 type Item = {
     name: string;
@@ -87,9 +92,12 @@ const MenuItem = (props: MenuItemProps) => {
 
 const Business = () => {
     const { id } = useLocalSearchParams<{ id: string }>();
-    const [businessName, setBusinessName] = useState<String>("Loading...");
+    const [businessName, setBusinessName] = useState<string>("Loading...");
     const [items, setItems] = useState<Item[]>([]);
     const [quantities, setQuantities] = useState<number[]>([]);
+    const [loaderString, setLoaderString] = useState<string>(
+        "Fetching menu items",
+    );
 
     const getBusinessInfo = async () => {
         const businessRef = doc(db, "businesses", id);
@@ -137,7 +145,7 @@ const Business = () => {
     if (items.length === 0) {
         return (
             <>
-                <Stack.Screen options={{ title: "Loading..." }} />
+                <Stack.Screen options={{ title: businessName }} />
                 <View
                     style={{
                         flex: 1,
@@ -146,7 +154,7 @@ const Business = () => {
                     }}
                 >
                     <ActivityIndicator />
-                    <Text style={{ margin: 24 }}>Getting menu items</Text>
+                    <Text style={{ margin: 24 }}>{loaderString}</Text>
                 </View>
             </>
         );
@@ -170,6 +178,29 @@ const Business = () => {
         (sum, item, index) => sum + item.price * quantities[index],
         0,
     );
+
+    const checkout = async () => {
+        const transactionData = {
+            business_id: id,
+            user_id: auth.currentUser!.uid,
+            business_name: businessName,
+            amount: subtotal,
+            time: Timestamp.now(),
+        };
+        setLoaderString("Processing transaction");
+        setItems([]);
+        const transactionsCollection = collection(db, "transactions");
+        const transaction = await addDoc(
+            transactionsCollection,
+            transactionData,
+        );
+        const balanceRef = doc(db, "users", auth.currentUser!.uid);
+        const balanceSnapshot = await getDoc(balanceRef);
+        const newBalance = await updateDoc(balanceRef, {
+            balance: balanceSnapshot.data()!.balance - subtotal,
+        });
+        router.replace("/wallet");
+    };
 
     return (
         <>
@@ -232,6 +263,7 @@ const Business = () => {
                     Subtotal: ${subtotal.toFixed(2)}
                 </Text>
                 <Pressable
+                    onPress={checkout}
                     style={{
                         backgroundColor: "black",
                         padding: 16,
