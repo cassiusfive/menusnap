@@ -58,8 +58,28 @@ const MenuItem = (props: MenuItemProps) => {
                     <Text style={styles.itemPrice}>
                         ${props.item.price.toFixed(2)}
                     </Text>
+
                 </View>
                 <Text style={{ padding: 0 }}>{props.item.description}</Text>
+                <View pointerEvents="none" 
+                style={{
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    justifyContent: "space-between",
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                }}>
+                    <Pressable onPress={handlePress}>
+                        <Card style={{ gap: 5, shadowOpacity: 0, margin: 0, padding: 0, backgroundColor: 'black', width: 30,height: 31, textAlign: "center", }}>
+                            <Text style={{ textAlign: 'center', color: 'white', fontSize: 25, margin:0, padding:0 }}>-</Text>
+                        </Card>
+                    </Pressable>
+                    <Pressable onPress={handlePress}>
+                        <Card style={{ gap: 5, shadowOpacity: 0, margin: 0, padding: 0, backgroundColor: 'black', width: 30, height: 31, textAlign: "center", }}>
+                            <Text style={{ textAlign: 'center', color: 'white', fontSize: 25, margin: 0, padding: 0 }}>+</Text>
+                        </Card>
+                    </Pressable>
+                </View>
             </Card>
         </Pressable>
     );
@@ -107,7 +127,7 @@ const Business = () => {
             }).start();
         } else {
             Animated.timing(heightAnim, {
-                toValue: 80,
+                toValue: 100,
                 duration: 400,
                 useNativeDriver: false,
             }).start();
@@ -158,20 +178,20 @@ const Business = () => {
             <ScrollView style={{ padding: 10 }}>
                 {items.length
                     ? items.map((item, index) => {
-                          return (
-                              <MenuItem
-                                  key={index}
-                                  item={item}
-                                  quantity={quantities[index]}
-                                  addToCart={() => {
-                                      updateQuantity(1, index);
-                                  }}
-                                  removeFromCart={() => {
-                                      updateQuantity(-1, index);
-                                  }}
-                              />
-                          );
-                      })
+                        return (
+                            <MenuItem
+                                key={index}
+                                item={item}
+                                quantity={quantities[index]}
+                                addToCart={() => {
+                                    updateQuantity(1, index);
+                                }}
+                                removeFromCart={() => {
+                                    updateQuantity(-1, index);
+                                }}
+                            />
+                        );
+                    })
                     : null}
             </ScrollView>
             <Animated.View
@@ -192,6 +212,8 @@ const Business = () => {
                             fontWeight: "bold",
                             fontSize: 20,
                             color: "white",
+                            paddingTop: 20,
+                            paddingBottom: 50,
                         }}
                     >
                         Order Summary
@@ -203,6 +225,8 @@ const Business = () => {
                         fontWeight: "bold",
                         fontSize: 20,
                         color: "white",
+                        paddingTop: 50,
+                        paddingBottom: 50,
                     }}
                 >
                     Subtotal: ${subtotal.toFixed(2)}
