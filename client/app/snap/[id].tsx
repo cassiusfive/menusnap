@@ -17,8 +17,11 @@ import {
     collection,
     where,
     getDocs,
+    Timestamp,
+    addDoc,
 } from "firebase/firestore";
-import { db } from "../services/firebase";
+import { db, auth } from "../services/firebase";
+import "firebase/firestore";
 import Card from "@/shared/Card";
 
 type Item = {
@@ -93,7 +96,7 @@ const Business = () => {
         getBusinessInfo().catch((err) => {
             console.log(err);
         });
-    }, []);
+    }, [isFocused]);
 
     const heightAnim = useRef(new Animated.Value(100)).current;
     const [checkoutOpen, setCheckoutOpen] = useState<boolean>(false);
@@ -150,6 +153,21 @@ const Business = () => {
         (sum, item, index) => sum + item.price * quantities[index],
         0,
     );
+
+    const checkout = async () => {
+        const transactionData = {
+            business_id: id,
+            user_id: auth.currentUser!.uid,
+            business_name: businessName,
+            amount: subtotal,
+            time: Timestamp.now(),
+        };
+        const transactionsCollection = collection(db, "transactions");
+        const transaction = await addDoc(
+            transactionsCollection,
+            transactionData,
+        );
+    };
 
     return (
         <>
@@ -208,6 +226,7 @@ const Business = () => {
                     Subtotal: ${subtotal.toFixed(2)}
                 </Text>
                 <Pressable
+                    onPress={checkout}
                     style={{
                         backgroundColor: "black",
                         padding: 16,
