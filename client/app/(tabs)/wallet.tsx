@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useCallback } from "react";
 import { useState, useEffect } from "react";
 import { auth, db } from "../services/firebase";
 import {
@@ -11,6 +11,7 @@ import {
     getDoc,
 } from "firebase/firestore";
 import Card from "@/shared/Card";
+import { useFocusEffect } from "expo-router";
 
 type Transaction = {
     business_name: string;
@@ -45,11 +46,13 @@ const Wallet = () => {
         setBalance(balanceSnapshot.data()!.balance);
     };
 
-    useEffect(() => {
-        getWalletInfo().catch((err) => {
-            console.log(err);
-        });
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            getWalletInfo().catch((err) => {
+                console.log(err);
+            });
+        }, []),
+    );
 
     return (
         <View style={{ padding: 20 }}>
