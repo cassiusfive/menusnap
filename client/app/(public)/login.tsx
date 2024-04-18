@@ -1,5 +1,11 @@
 import React from "react";
-import { Text, TextInput, TouchableOpacity, View, StyleSheet } from "react-native";
+import {
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+    StyleSheet,
+} from "react-native";
 import { useSignIn } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 
@@ -29,10 +35,11 @@ const Login = () => {
     };
     return (
         <View style={styles.containerBox}>
-            <Text style={styles.snapMenuText}>Snap Menu</Text>
+            <Text style={styles.snapMenuText}>Menusnap</Text>
             <View style={styles.containerBox}>
                 <Text style={styles.helpText}>Login to your account</Text>
-                <TextInput style={styles.input}
+                <TextInput
+                    style={styles.input}
                     autoCapitalize="none"
                     value={emailAddress}
                     placeholder="Email..."
@@ -43,7 +50,8 @@ const Login = () => {
             </View>
 
             <View>
-                <TextInput style={styles.input}
+                <TextInput
+                    style={styles.input}
                     value={password}
                     placeholder="Password..."
                     secureTextEntry={true}
@@ -55,8 +63,11 @@ const Login = () => {
                 <Text style={styles.buttonText}>Sign in</Text>
             </TouchableOpacity>
             <Text style={styles.helpText}>Don't have an account yet?</Text>
-            <TouchableOpacity style={styles.button} onPress={() => router.replace("/register")}>
-                <Text style={styles.buttonText} >Create account</Text>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => router.replace("/register")}
+            >
+                <Text style={styles.buttonText}>Create account</Text>
             </TouchableOpacity>
         </View>
     );
@@ -69,40 +80,40 @@ const styles = StyleSheet.create({
     snapMenuText: {
         fontSize: 50,
         // fontFamily: 'Verdana',
-        fontWeight: '800', 
-        textAlign: 'center',
+        fontWeight: "800",
+        textAlign: "center",
     },
     input: {
         height: 40,
-        borderColor: '#ccc',
+        borderColor: "#ccc",
         borderWidth: 1,
         borderRadius: 10,
         paddingHorizontal: 10,
         fontSize: 16,
-        color: '#333',
+        color: "#333",
         margin: 10,
     },
     button: {
-        backgroundColor: '#007bff',
+        backgroundColor: "#007bff",
         borderRadius: 10,
         paddingVertical: 12,
         paddingHorizontal: 20,
-        alignItems: 'center',
+        alignItems: "center",
         margin: 10,
     },
     buttonText: {
-        color: '#fff',
+        color: "#fff",
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: "bold",
     },
     helpText: {
-        color: '#333',
-        textAlign: 'center',
+        color: "#333",
+        textAlign: "center",
     },
     returnButton: {
         padding: 10,
-        textAlign: 'center',
-    }
+        textAlign: "center",
+    },
 });
 
 export default Login;
